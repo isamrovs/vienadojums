@@ -3,48 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kvadrātvienādojuma risinātājs</title>
+    <title>Kvadrātiskās vienādojuma risināšana</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
             text-align: center;
-            margin: 50px;
         }
+
+        h1 {
+            color: #4CAF50;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            text-align: left;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
         input {
-            margin: 5px;
-            padding: 8px;
-            width: 100px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            outline: none;
         }
+
+        input:focus {
+            border-color: #4CAF50;
+        }
+
         button {
-            padding: 10px 20px;
+            padding: 10px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
         }
     </style>
 </head>
 <body>
-    <h2>Kvadrātvienādojuma risinātājs</h2>
-    <p>Ievadiet koeficientus (a, b, c):</p>
-    <input type="number" id="a" placeholder="a"> 
-    <input type="number" id="b" placeholder="b"> 
-    <input type="number" id="c" placeholder="c"> 
-    <br>
-    <button onclick="aprēķināt()">Aprēķināt</button>
-    <p id="rezultāts"></p>
+    <div class="container">
+        <h1>Kvadrātiskā vienādojuma risināšana</h1>
+        <p>Ievadiet koeficientus vienādojumam ax² + bx + c = 0</p>
+
+        <form id="quadraticForm">
+            <label for="a">Koeficients a:</label>
+            <input type="number" id="a" required>
+
+            <label for="b">Koeficients b:</label>
+            <input type="number" id="b" required>
+
+            <label for="c">Koeficients c:</label>
+            <input type="number" id="c" required>
+
+            <button type="submit">Risināt</button>
+        </form>
+
+        <div id="result"></div>
+    </div>
 
     <script>
-        function aprēķināt() {
-            let a = parseFloat(document.getElementById('a').value);
-            let b = parseFloat(document.getElementById('b').value);
-            let c = parseFloat(document.getElementById('c').value);
-            
+        document.getElementById('quadraticForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const a = parseFloat(document.getElementById('a').value);
+            const b = parseFloat(document.getElementById('b').value);
+            const c = parseFloat(document.getElementById('c').value);
+
             if (isNaN(a) || isNaN(b) || isNaN(c)) {
-                document.getElementById('rezultāts').innerText = "Lūdzu ievadiet visus koeficientus!";
+                document.getElementById('result').textContent = 'Lūdzu, ievadiet visus koeficientus.';
                 return;
             }
-            
-            let diskriminants = b * b - 4 * a * c;
-            document.getElementById('rezultāts').innerText = "Diskriminants: " + diskriminants;
-        }
+
+            const discriminant = b * b - 4 * a * c;
+            let resultText = '';
+
+            if (discriminant > 0) {
+                const x1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+                const x2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+                resultText = `Vienādojuma saknes: x₁ = ${x1}, x₂ = ${x2}`;
+            } else if (discriminant === 0) {
+                const x = -b / (2 * a);
+                resultText = `Vienīgā sakne: x = ${x}`;
+            } else {
+                resultText = 'Vienādojumam nav reālu sakņu.';
+            }
+
+            document.getElementById('result').textContent = resultText;
+        });
     </script>
 </body>
 </html>
